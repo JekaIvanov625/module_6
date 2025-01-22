@@ -5,13 +5,16 @@ class Field:
         self.value = value
     def __str__(self):
         return str(self.value)
+
 class Name(Field):
     pass
+
 class Phone(Field):
     def __init__(self, value):
         if not value.isdigit() or len(value) != 10:
             raise ValueError("Phone number must be 10 digits.")
         super().__init__(value)
+
 class Record:
     def __init__(self, name):
         self.name = Name(name)
@@ -27,8 +30,8 @@ class Record:
     def edit_phone(self, old_phone, new_phone):
         phone_to_edit = self.find_phone(old_phone)
         if phone_to_edit:
-            self.remove_phone(old_phone)
-            self.add_phone(new_phone)
+            self.add_phone(new_phone)  # Спочатку додаємо новий номер
+            self.remove_phone(old_phone)  # Потім видаляємо старий
         else:
             raise ValueError("Phone not found.")
     def find_phone(self, phone):
@@ -39,6 +42,7 @@ class Record:
     def __str__(self):
         phones = "; ".join(p.value for p in self.phones)
         return f"Contact name: {self.name.value}, phones: {phones}"
+
 class AddressBook(UserDict):
     def add_record(self, record):
         self.data[record.name.value] = record
@@ -51,6 +55,7 @@ class AddressBook(UserDict):
             raise KeyError("Contact not found.")
     def __str__(self):
         return "\n".join(str(record) for record in self.data.values())
+
 def main():
     book = AddressBook()
     print("Welcome to the address book!")
